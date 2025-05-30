@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.example.apipix.model.Cliente;
 import com.example.apipix.repository.RepositorioCliente;
-
+	
 @RestController
 @RequestMapping("/api/clientes")
 public class ClienteController {

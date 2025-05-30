@@ -1,43 +1,113 @@
 package com.example.apipix.model;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "transacoes_pix")
 public class TransacaoPix {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-	    private Long id;
+    @ManyToOne
+    @JoinColumn(name = "remetente_id")
+    private Cliente remetente;
 
-	    private BigDecimal valor;
+    @ManyToOne
+    @JoinColumn(name = "destinatario_id")
+    private Cliente destinatario;
 
-	    @ManyToOne
-	    private Cliente cliente;
+    private BigDecimal valor;
 
-	    private String codigoPix;
+    private LocalDateTime dataHora;
 
-		public void setCliente(Cliente cliente2) {	
-			
-		}
+    private String chaveDestino;
 
-		public void setValor(BigDecimal valor2) {
-			
-		}
+    @Enumerated(EnumType.STRING)
+    private TipoChave tipoChave;
 
-		public void setCodigoPix(String codigoPix2) {
-		
-		}
+    private String descricao;
 
-		public static void save(TransacaoPix transacao) {
-			
-		}
+    // Enum TipoChave
+    public enum TipoChave {
+        CPF, CNPJ, EMAIL, TELEFONE, ALEATORIA
+    }
+
+    // Getters e Setters
+
+    public Long getId() {
+        return id;
+    }
+
+    public Cliente getRemetente() {
+        return remetente;
+    }
+
+    public void setRemetente(Cliente remetente) {
+        this.remetente = remetente;
+    }
+
+    public Cliente getDestinatario() {
+        return destinatario;
+    }
+
+    public void setDestinatario(Cliente destinatario) {
+        this.destinatario = destinatario;
+    }
+
+    public BigDecimal getValor() {
+        return valor;
+    }
+
+    public void setValor(BigDecimal valor) {
+        this.valor = valor;
+    }
+
+    public LocalDateTime getDataHora() {
+        return dataHora;
+    }
+
+    public void setDataHora(LocalDateTime dataHora) {
+        this.dataHora = dataHora;
+    }
+
+    public String getChaveDestino() {
+        return chaveDestino;
+    }
+
+    public void setChaveDestino(String chaveDestino) {
+        this.chaveDestino = chaveDestino;
+    }
+
+    public TipoChave getTipoChave() {
+        return tipoChave;
+    }
+
+    public void setTipoChave(TipoChave tipoChave) {
+        this.tipoChave = tipoChave;  // ✅ Aqui estava faltando!
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+    
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
 }
+
 
 
 	

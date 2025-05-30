@@ -3,14 +3,12 @@ package com.example.apipix.dto;
 import java.math.BigDecimal;
 
 public class PixRequest {
-
+    
     private Long clienteId;
     private BigDecimal valor;
+    private String chavePixDestino;
 
-    public PixRequest() {
-        // Construtor padrão obrigatório para desserialização JSON
-    }
-
+    // Getters e Setters
     public Long getClienteId() {
         return clienteId;
     }
@@ -26,7 +24,18 @@ public class PixRequest {
     public void setValor(BigDecimal valor) {
         this.valor = valor;
     }
+
+    public String getChavePixDestino() {
+        return chavePixDestino;
+    }
+
+    public void setChavePixDestino(String chavePixDestino) {
+        this.chavePixDestino = chavePixDestino;
+    }
 }
+ 
+
+
 
 
 	
