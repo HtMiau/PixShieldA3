@@ -59,7 +59,7 @@ public class ClientePixHttp {
         }
     }
 
-    // ✅ Método para gerar código Pix
+    //Método para gerar código Pix
     public static String gerarCodigoPix(String chavePix, String nome, String cidade, BigDecimal valor) {
         String valorFormatado = String.format("%.2f", valor);
         // Simulação de código Pix conforme padrão BR Code
@@ -71,7 +71,7 @@ public class ClientePixHttp {
         return codigoPix;
     }
 
-    // ✅ Método para gerar QR Code a partir do código Pix
+   //Método para gerar QR Code a partir do código Pix
     public static BufferedImage gerarQrCode(String codigoPix) {
         try {
             BitMatrix matrix = new MultiFormatWriter().encode(
@@ -80,14 +80,14 @@ public class ClientePixHttp {
                     300,
                     300
             );
-            return MatrixToImageWriter.toBufferedImage(matrix);
+            return MatrixToImageWriter.toBufferedImage(matrix); 
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
 
-    // ✅ Método para converter BufferedImage em Base64
+    //Método para converter BufferedImage em Base64
     public static String converterImagemParaBase64(BufferedImage image) {
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
