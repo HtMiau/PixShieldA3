@@ -16,34 +16,40 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `transacoes_fraudulentas`
+-- Table structure for table `transacoes_pix`
 --
 
-DROP TABLE IF EXISTS `transacoes_fraudulentas`;
+DROP TABLE IF EXISTS `transacoes_pix`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `transacoes_fraudulentas` (
+CREATE TABLE `transacoes_pix` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `transaction_id` varchar(100) NOT NULL,
-  `remetente_id` int NOT NULL,
+  `remetente_id` int DEFAULT NULL,
   `destinatario_id` int DEFAULT NULL,
-  `valor` decimal(10,2) NOT NULL,
-  `pontuacao_risco` int NOT NULL,
-  `nivel_risco` enum('BAIXO','MÉDIO','ALTO') NOT NULL,
-  `alertas` json DEFAULT NULL,
-  `data_deteccao` datetime DEFAULT CURRENT_TIMESTAMP,
-  `status` enum('DETECTADA','INVESTIGADA','CONFIRMADA','FALSO_POSITIVO') DEFAULT 'DETECTADA',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `valor` decimal(10,2) DEFAULT NULL,
+  `data_hora` datetime DEFAULT CURRENT_TIMESTAMP,
+  `chave_destino` varchar(100) DEFAULT NULL,
+  `tipo_chave` enum('CPF','CNPJ','EMAIL','TELEFONE','ALEATORIA') DEFAULT NULL,
+  `descricao` text,
+  `status` varchar(20) DEFAULT 'PENDENTE',
+  `data_analise` datetime DEFAULT NULL,
+  `transaction_id` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `remetente_id` (`remetente_id`),
+  KEY `destinatario_id` (`destinatario_id`),
+  CONSTRAINT `transacoes_pix_ibfk_1` FOREIGN KEY (`remetente_id`) REFERENCES `clientes` (`id_cliente`),
+  CONSTRAINT `transacoes_pix_ibfk_2` FOREIGN KEY (`destinatario_id`) REFERENCES `clientes` (`id_cliente`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `transacoes_fraudulentas`
+-- Dumping data for table `transacoes_pix`
 --
 
-LOCK TABLES `transacoes_fraudulentas` WRITE;
-/*!40000 ALTER TABLE `transacoes_fraudulentas` DISABLE KEYS */;
-/*!40000 ALTER TABLE `transacoes_fraudulentas` ENABLE KEYS */;
+LOCK TABLES `transacoes_pix` WRITE;
+/*!40000 ALTER TABLE `transacoes_pix` DISABLE KEYS */;
+INSERT INTO `transacoes_pix` VALUES (1,1,1,250.00,'2025-06-03 21:04:46','12345678900','ALEATORIA','Transação Pix gerada com sucesso.','PENDENTE',NULL,NULL);
+/*!40000 ALTER TABLE `transacoes_pix` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -55,4 +61,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-06-03 16:43:43
+-- Dump completed on 2025-06-04 17:08:25

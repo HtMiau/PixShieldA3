@@ -16,31 +16,35 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `log_transacoes`
+-- Table structure for table `transacoes_fraudulentas`
 --
 
-DROP TABLE IF EXISTS `log_transacoes`;
+DROP TABLE IF EXISTS `transacoes_fraudulentas`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `log_transacoes` (
+CREATE TABLE `transacoes_fraudulentas` (
   `id` int NOT NULL AUTO_INCREMENT,
   `transaction_id` varchar(100) NOT NULL,
-  `resultado_analise` varchar(50) NOT NULL,
+  `remetente_id` int NOT NULL,
+  `destinatario_id` int DEFAULT NULL,
+  `valor` decimal(10,2) NOT NULL,
   `pontuacao_risco` int NOT NULL,
-  `acao_tomada` varchar(50) NOT NULL,
-  `timestamp_log` datetime DEFAULT CURRENT_TIMESTAMP,
-  `detalhes_json` json DEFAULT NULL,
+  `nivel_risco` enum('BAIXO','MÉDIO','ALTO') NOT NULL,
+  `alertas` json DEFAULT NULL,
+  `data_deteccao` datetime DEFAULT CURRENT_TIMESTAMP,
+  `status` enum('DETECTADA','INVESTIGADA','CONFIRMADA','FALSO_POSITIVO') DEFAULT 'DETECTADA',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `log_transacoes`
+-- Dumping data for table `transacoes_fraudulentas`
 --
 
-LOCK TABLES `log_transacoes` WRITE;
-/*!40000 ALTER TABLE `log_transacoes` DISABLE KEYS */;
-/*!40000 ALTER TABLE `log_transacoes` ENABLE KEYS */;
+LOCK TABLES `transacoes_fraudulentas` WRITE;
+/*!40000 ALTER TABLE `transacoes_fraudulentas` DISABLE KEYS */;
+INSERT INTO `transacoes_fraudulentas` VALUES (1,'1',1,1,250.00,15,'ALTO','{\"nivel\": \"baixo\"}','2025-06-03 21:04:46','DETECTADA');
+/*!40000 ALTER TABLE `transacoes_fraudulentas` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -52,4 +56,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-06-03 16:43:44
+-- Dump completed on 2025-06-04 17:08:25
