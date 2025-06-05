@@ -1,2 +1,3 @@
-2025/06/03-18:10:43.538 39b4 Creating DB C:\Users\Davi Gabriel\OneDrive\Documentos\Desenvolvimento ApiPix\apipix\.metadata\.plugins\org.eclipse.swt\EBWebView\Default\Sync Data\LevelDB since it was missing.
-2025/06/03-18:10:43.547 39b4 Reusing MANIFEST C:\Users\Davi Gabriel\OneDrive\Documentos\Desenvolvimento ApiPix\apipix\.metadata\.plugins\org.eclipse.swt\EBWebView\Default\Sync Data\LevelDB/MANIFEST-000001
+2025/06/04-23:14:43.626 5fe0 Reusing MANIFEST C:\Users\Davi Gabriel\OneDrive\Documentos\Desenvolvimento ApiPix\apipix\.metadata\.plugins\org.eclipse.swt\EBWebView\Default\Sync Data\LevelDB/MANIFEST-000001
+2025/06/04-23:14:43.627 5fe0 Recovering log #3
+2025/06/04-23:14:43.627 5fe0 Reusing old log C:\Users\Davi Gabriel\OneDrive\Documentos\Desenvolvimento ApiPix\apipix\.metadata\.plugins\org.eclipse.swt\EBWebView\Default\Sync Data\LevelDB/000003.log 

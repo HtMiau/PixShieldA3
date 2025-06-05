@@ -10,8 +10,16 @@ import com.example.apipix.dto.PixRequest;
 import com.example.apipix.dto.PixResponse;
 import com.example.apipix.model.Cliente;
 import com.example.apipix.model.TransacaoPix;
+import com.example.apipix.model.LogTransacao;
+import com.example.apipix.model.TransacaoFraudulenta;
+import com.example.apipix.model.NivelRisco;
+import com.example.apipix.model.StatusFraude;
 import com.example.apipix.repository.RepositorioCliente;
 import com.example.apipix.repository.RepositorioTransacao;
+import com.example.apipix.service.FraudeService;
+import com.example.apipix.service.IAResponse;
+import com.example.apipix.service.IAService;
+import com.example.apipix.service.LogTransacaoService;
 import com.example.apipix.util.ClientePixHttp;
 
 @RestController
@@ -22,11 +30,20 @@ public class PixController {
     private RepositorioCliente repositorioClienteInterno;
 
     @Autowired
-    private RepositorioTransacao repositorioTrasacaoInterno;
+    private RepositorioTransacao repositorioTransacaoInterno;
+
+    @Autowired
+    private IAService iaService;
+
+    @Autowired
+    private LogTransacaoService logTransacaoService;
+
+    @Autowired
+    private FraudeService fraudeService;
 
     @PostMapping
     public ResponseEntity<PixResponse> gerarPix(@RequestBody PixRequest request) throws Exception {
-        
+
         Long clienteId = request.getClienteId();
         if (clienteId == null) {
             throw new RuntimeException("ID do cliente é obrigatório");
@@ -36,13 +53,12 @@ public class PixController {
         Cliente cliente = repositorioClienteInterno.findById(clienteId)
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
 
-        // Usar chave de destino do JSON
         String chavePixDestino = request.getChavePixDestino();
         if (chavePixDestino == null || chavePixDestino.isEmpty()) {
             throw new RuntimeException("Chave Pix de destino é obrigatória");
         }
 
-        // Gerar código Pix com a chave de destino
+        // Gerar código Pix
         String codigoPix = ClientePixHttp.gerarCodigoPix(
                 chavePixDestino,
                 cliente.getNome(),
@@ -50,10 +66,8 @@ public class PixController {
                 request.getValor()
         );
 
-        // Gerar QR Code
+        // Gerar QR Code e converter
         BufferedImage qrCode = ClientePixHttp.gerarQrCode(codigoPix);
-
-        // Converter para Base64
         String base64Qr = ClientePixHttp.converterImagemParaBase64(qrCode);
 
         // Criar transação
@@ -66,21 +80,49 @@ public class PixController {
         transacao.setDataHora(java.time.LocalDateTime.now());
         transacao.setTipoChave(TransacaoPix.TipoChave.ALEATORIA);
 
-        repositorioTrasacaoInterno.save(transacao);
+        // Salvar transação
+        TransacaoPix transacaoSalva = repositorioTransacaoInterno.save(transacao);
 
+        // 🔹 Chamar serviço de IA para análise da transação
+        IAResponse iaResult = (IAResponse) iaService.analisarTransacao(transacaoSalva);
+
+        // 🔹 Registrar log da transação
+        LogTransacao log = new LogTransacao();
+        log.setTransactionId(transacaoSalva.getId().toString());
+        log.setResultadoAnalise(iaResult.getAcaoTomada());
+        log.setPontuacaoRisco(iaResult.getPontuacaoRisco());
+        log.setAcaoTomada(iaResult.getAcaoTomada());
+        log.setDetalhesJson(iaResult.getDetalhesJson());
+        logTransacaoService.registrar(log);
+
+        // 🔹 Se for identificado risco de fraude, registrar
+        if (iaResult.isFraude()) {
+            TransacaoFraudulenta fraude = new TransacaoFraudulenta();
+            fraude.setTransactionId(transacaoSalva.getId().toString());
+            fraude.setRemetenteId(cliente.getId());
+            fraude.setDestinatarioId(cliente.getId());
+            fraude.setValor(transacaoSalva.getValor());
+            fraude.setPontuacaoRisco(iaResult.getPontuacaoRisco());
+
+            // Ajuste conforme regra de negócio ou resposta da IA
+            fraude.setNivelRisco(NivelRisco.ALTO);
+            fraude.setAlertas(iaResult.getDetalhesJson());
+            fraude.setStatus(StatusFraude.DETECTADA);
+
+            fraudeService.registrar(fraude);
+        }
+
+        // Criar resposta
         PixResponse response = new PixResponse(
-        	    codigoPix,
-        	    base64Qr,
-        	    "Transação Pix realizada com sucesso.",
-        	    chavePixDestino
-        	);
-
+                codigoPix,
+                base64Qr,
+                "Transação Pix realizada com sucesso.",
+                chavePixDestino
+        );
 
         return ResponseEntity.ok(response);
     }
 }
-
-
 
 
 
