@@ -13,11 +13,8 @@ import com.example.apipix.model.TransacaoPix;
 @Service
 public class IAService {
 
-    // ✅ Removemos o RestTemplate e o @Value, não são necessários para o Mock
-    // private final RestTemplate restTemplate = new RestTemplate();
 
     public IAResponse analisarTransacao(TransacaoPix transacao) {
-        // ✅ MOCK SIMPLES → substitui a chamada HTTP para a IA
         return new IAResponse(
             true,                         // fraude
             15,                            // pontuacaoRisco
