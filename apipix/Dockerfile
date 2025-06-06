@@ -1,9 +1,9 @@
-FROM maven:3.9.6-eclipse-temurin-17 AS build
+FROM maven:3.9.6-eclipse-temurin-21 AS build
 WORKDIR /build
 COPY apipix/ /build
 RUN mvn clean package -DskipTests
 
-FROM eclipse-temurin:17-jdk
+FROM eclipse-temurin:21-jdk
 WORKDIR /app
 COPY --from=build /build/target/apipix-0.0.1-SNAPSHOT.jar app.jar
 EXPOSE 8080
