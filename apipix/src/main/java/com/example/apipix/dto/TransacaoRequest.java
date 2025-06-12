@@ -8,6 +8,7 @@ public class TransacaoRequest {
     private String descricao;
     private Long remetenteId;
     private Long destinatarioId;
+    private String dataHora; // NOVO CAMPO
 
     public TransacaoRequest() {
     }
@@ -59,5 +60,14 @@ public class TransacaoRequest {
 
     public void setDestinatarioId(Long destinatarioId) {
         this.destinatarioId = destinatarioId;
+    }
+
+    // NOVO GETTER E SETTER
+    public String getDataHora() {
+        return dataHora;
+    }
+
+    public void setDataHora(String dataHora) {
+        this.dataHora = dataHora;
     }
 }

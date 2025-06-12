@@ -9,7 +9,8 @@ import java.util.Map;
 public class WebhookCliente{
 
     public static void main(String[] args) {
-        String webhookUrl = "https://abraaoia.app.n8n.cloud/webhook-test/pix-transaction";
+        String n8nUrl = "https://abraaoia.app.n8n.cloud/webhook-test/pix-transaction";
+
 
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
@@ -26,7 +27,7 @@ public class WebhookCliente{
 
         HttpEntity<Map<String, Object>> request = new HttpEntity<>(payload, headers);
 
-        ResponseEntity<String> response = restTemplate.postForEntity(webhookUrl, request, String.class);
+        ResponseEntity<String> response = restTemplate.postForEntity( n8nUrl, request, String.class);
 
         System.out.println("Resposta do n8n: " + response.getBody());
     }

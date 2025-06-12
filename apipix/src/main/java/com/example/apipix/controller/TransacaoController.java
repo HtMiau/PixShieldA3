@@ -32,11 +32,19 @@ public class TransacaoController {
         dadosAnalise.put("descricao", request.getDescricao());
         dadosAnalise.put("remetenteId", request.getRemetenteId());
         dadosAnalise.put("destinatarioId", request.getDestinatarioId());
-        dadosAnalise.put("dataHora", LocalDateTime.now());
+
+        // Verifica se dataHora foi enviada, caso contrário usa a atual
+        if (request.getDataHora() != null && !request.getDataHora().isEmpty()) {
+            dadosAnalise.put("dataHora", request.getDataHora());
+        } else {
+            dadosAnalise.put("dataHora", LocalDateTime.now());
+        }
 
         // Envia para o N8N
         String n8nUrl = "https://abraaoia.app.n8n.cloud/webhook-test/pix-transaction";
+        System.out.println("Enviando dados para o N8N: " + dadosAnalise);
         AnaliseResponse resposta = restTemplate.postForObject(n8nUrl, dadosAnalise, AnaliseResponse.class);
+        System.out.println("Resposta do N8N: " + resposta);
 
         return ResponseEntity.ok(resposta);
     }
