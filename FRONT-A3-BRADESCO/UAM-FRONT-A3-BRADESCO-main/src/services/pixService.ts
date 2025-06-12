@@ -1,12 +1,11 @@
-// src/services/pixService.ts
-import axios from 'axios'
-import type { PixRequest, PixResponse } from '@/types/pix'
+//services/pixService.ts
 
-const api = axios.create({ baseURL: 'http://localhost:8080/api' })
+import axios from 'axios';
+import type { TransacaoRequest, AnaliseResponse } from '@/types/pix';
 
-export const gerarPix = async (dados: PixRequest): Promise<PixResponse> => {
-    const res = await api.post<PixResponse>('/pix', dados, {
-        headers: { 'Content-Type': 'application/json' },
-    })
-    return res.data
-}
+const api = axios.create({
+    baseURL: import.meta.env.VITE_API_URL ?? 'http://localhost:8080/api',
+});
+
+export const analisarTransacao = async (payload: TransacaoRequest) =>
+    api.post<AnaliseResponse>('/transacoes/analisar', payload).then(r => r.data);

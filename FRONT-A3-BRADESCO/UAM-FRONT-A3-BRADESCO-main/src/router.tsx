@@ -3,7 +3,7 @@ import { createBrowserRouter } from 'react-router-dom'
 import Layout      from '@/pages/Layout'
 import Home        from '@/pages/Home.tsx'
 import Transfer    from '@/pages/Transferencia'
-import GerarPix    from '@/pages/GerarPix'
+import FazerPix from "@/pages/FazerPix.tsx";
 
 export const router = createBrowserRouter([
     {
@@ -11,7 +11,7 @@ export const router = createBrowserRouter([
         children: [
             { index: true, element: <Home /> },
             { path: 'transferencia', element: <Transfer /> },
-            { path: 'gerar-pix',     element: <GerarPix /> },
+            { path: 'pix',     element: <FazerPix /> },
             { path: '*', element: <div className='text-center mt-20'>Página não encontrada</div> },
         ],
     },
