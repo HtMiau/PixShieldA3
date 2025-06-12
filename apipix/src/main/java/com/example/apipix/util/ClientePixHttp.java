@@ -18,28 +18,28 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 public class ClientePixHttp {
 
     public static void main(String[] args) {
-        try {
+      try {
             // URL da sua API
-            URL url = new URL("http://localhost:8080/api/pix");
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+          URL url = new URL("http://localhost:8080/api/pix");
+          HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
-            // Configurações da requisição
-            conn.setRequestMethod("POST");
-            conn.setDoOutput(true);
-            conn.setRequestProperty("Content-Type", "application/json");
+            //Configurações da requisição
+           conn.setRequestMethod("POST");
+           conn.setDoOutput(true);
+           conn.setRequestProperty("Content-Type", "application/json");
 
             // JSON de entrada
-            String jsonInputString = "{\"clienteId\":1,\"valor\":250.00}";
+           String jsonInputString = "{\"clienteId\":1,\"valor\":250.00}";
 
             // Enviando o JSON
             try (OutputStream os = conn.getOutputStream()) {
-                byte[] input = jsonInputString.getBytes("utf-8");
-                os.write(input, 0, input.length);
-            }
+             byte[] input = jsonInputString.getBytes("utf-8");
+            os.write(input, 0, input.length);
+           }
 
-            // Código de resposta
-            int code = conn.getResponseCode();
-            System.out.println("Resposta: " + code);
+          //  // Código de resposta
+          int code = conn.getResponseCode();
+          System.out.println("Resposta: " + code);
 
             // Se quiser ler a resposta, descomente abaixo:
             /*
@@ -54,10 +54,10 @@ public class ClientePixHttp {
             }
             */
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+       } catch (Exception e) {
+         e.printStackTrace();
+     }
+ }
 
     //Método para gerar código Pix
     public static String gerarCodigoPix(String chavePix, String nome, String cidade, BigDecimal valor) {
