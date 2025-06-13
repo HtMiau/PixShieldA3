@@ -17,13 +17,14 @@ public class WebhookCliente{
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         Map<String, Object> payload = new HashMap<>();
-        payload.put("valor", 6000);
-        payload.put("chaveDestino", "123412341");
-        payload.put("tipoChave", "EMAIL");
+        payload.put("valor", 100);
+        payload.put("chaveDestino", "11111111111");
+        payload.put("tipoChave", "CPF");
         payload.put("descricao", "Pagamento de serviço");
         payload.put("remetenteId", "1");
         payload.put("destinatarioId", "2");
-        payload.put("dataHora", LocalDateTime.now().toString());
+        LocalDateTime dataHoraEspecifica = LocalDateTime.of(2025, 06, 12, 23, 30, 45);
+        payload.put("dataHora", dataHoraEspecifica.toString());
 
         HttpEntity<Map<String, Object>> request = new HttpEntity<>(payload, headers);
 
